@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Finance analysis Site</title>
+    {% block css_prepend %}
+    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery/jquery-ui.min.css') }}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}" type="text/css" charset="utf-8">
+    {% block css_append %}
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+    {% block js_prepend %}
+    {% endblock %}
+    <script src="{{ url_for('static', filename='js/jquery/jquery-3.3.1.min.js') }}" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery-ui.min.js') }}" charset="utf-8"></script>
+    {% block js_append %}
+    {% endblock %}
+</body>
