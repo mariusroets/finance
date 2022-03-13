@@ -15,32 +15,40 @@ def defaultDate ():
     return date
 
 @app.route("/")
-def index(request, date = None):
+def index():
     """The index page for the finance app
     """
-    date = defaultDate() if not date else date
-    form = MonthForm(data={'month_date': date})
-    if form.validate_on_submit():
-        # Handle post
-        print("Post")
-        #    date = form.cleaned_data['month_date']
+    date = defaultDate()
+#     form = MonthForm(data={'month_date': date})
+#     if form.validate_on_submit():
+#         # Handle post
+#         print("Post")
+#         #    date = form.cleaned_data['month_date']
 
-    tm = TransactionManager(date)
-    df = tm.transactionsWithTags()
-    session = Session()
-    tags = [ { c.key: getattr(row, c.key) for c in inspect(row).mapper.column_attrs} for row in session.query(Tag).order_by(Tag.name).all()]
+#     tm = TransactionManager(date)
+#     df = tm.transactionsWithTags()
+#     session = Session()
+#     tags = [ { c.key: getattr(row, c.key) for c in inspect(row).mapper.column_attrs} for row in session.query(Tag).order_by(Tag.name).all()]
     
-    context = {
-        'tabledata': df.to_json(orient='records', date_format='iso'),
-        'tags': tags,
-        'form': form
-    }
-    return render_template('index.html', context)
+#     context = {
+#         'tabledata': df.to_json(orient='records', date_format='iso'),
+#         'tags': tags,
+#         'form': form
+#     }
+    return render_template('index.html', date=date)
 
-@app.route("/")
-def hello():
-    form = MyForm(meta={'csrf': False})
-    return render_template("index.html", form=form)
+@app.route("/month/")
+def month():
+    date = defaultDate()
+    return render_template('index.html', date=date)
+
+@app.route("/fileimport/")
+def fileimport():
+    return render_template('fileimport.html')
+    
+@app.route("/admin/")
+def admin():
+    return render_template('admin.html')
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
@@ -49,6 +57,29 @@ def submit():
     #     print("Boom")
     return render_template('submit.html', form=form)
 
+    # path('month/', views.month, name='month'),
+    # path('month/<slug:date>/', views.month, name='month'),
+    # path('months/', views.months, name='months'),
+    # path('diagnostics/', views.diagnostics, name='diagnostics'),
+    # path('tagfilter/', views.tagfilter, name='tagfilter'),
+    # path('fileimport/', views.fileimport, name='fileimport'),
+    # path('admin/', views.admin, name='admin'),
+    # path('groups/', views.groups, name='groups'),
+    # path('tags/', views.tags, name='tags'),
+    # path('budget/', views.budget, name='budget'),
+    # path('grouptags/', views.grouptags, name='grouptags'),
+    # path('autotags/', views.autotags, name='autotags'),
+    # path('ajax/tags/', views.ajaxtaglist, name='ajaxtaglist'),
+    # path('ajax/tagfilter/<slug:date>/', views.ajaxtagfilter, name='ajaxtagfilter'),
+    # path('ajax/tagfilter/<slug:date>/<tags>/', views.ajaxtagfilter, name='ajaxtagfilter'),
+    # path('ajax/tagtransaction/<int:transaction_id>/<tags>/', views.ajaxtagtransaction, name='ajaxtagtransaction'),
+    # path('ajax/removetag/<int:transaction_id>/<tag>/', views.ajaxremovetag, name='ajaxremovetag'),
+    # path('ajax/importfile/<account>/<path:filename>', views.ajaximportfile, name='ajaximportfile'),
+    # path('ajax/deletegroup/<int:group_id>/', views.ajaxdeletegroup, name='ajaxdeletegroup'),
+    # path('ajax/addgroup/<slug:group_name>/', views.ajaxaddgroup, name='ajaxaddgroup'),
+    # path('ajax/deletetag/<int:tag_id>/', views.ajaxdeletetag, name='ajaxdeletetag'),
+    # path('ajax/addtag/<slug:tag_name>/', views.ajaxaddtag, name='ajaxaddtag'),
+    # path('ajax/autotag/<slug:month>/', views.ajaxautotag, name='ajaxautotag'),
 
 #{{ form.csrf_token }}
 #{{ form.name.label }} {{ form.name(size=20) }}

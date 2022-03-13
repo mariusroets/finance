@@ -1,6 +1,7 @@
 <!doctype html>
 {% extends "base.html" %}
 {% block content %}
-    This is a test
+{% include "monthmenu.html" %}
+    The date is {{ date }}
     <div id="like_button_container"></div>
 {% endblock %}
