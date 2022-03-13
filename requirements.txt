@@ -1,0 +1,8 @@
+flask
+flask-wtf
+ipython
+pandas
+python-dateutil
+sqlalchemy
+mysqlclient
+ipdb
