@@ -37,10 +37,19 @@ def index():
 #     }
     return render_template('index.html', date=date)
 
-@app.route("/month/")
-def month():
-    date = defaultDate()
+@app.route("/month/", defaults={'date': None})
+@app.route("/month/<date>")
+def month(date):
+    date = defaultDate() if not date else date
     return render_template('index.html', date=date)
+
+@app.route("/months/")
+def months():
+    return render_template('months.html')
+
+@app.routes("/diagnostics/")
+def diagnostics():
+    return render_template('diagnostics.html')
 
 @app.route("/fileimport/")
 def fileimport():
@@ -50,6 +59,30 @@ def fileimport():
 def admin():
     return render_template('admin.html')
 
+@app.route("/groups/")
+def groups():
+    return render_template('groups.html')
+
+@app.route("/tags/")
+def tags():
+    return render_template('tags.html')
+
+@app.route("/grouptags/")
+def grouptags():
+    return render_template('grouptags.html')
+
+@app.route("/autotags/")
+def autotags():
+    return render_template('autotags.html')
+
+@app.route("/tagfilter/")
+def tagfilter():
+    return render_template('tagfilter.html')
+
+@app.route("/budget/")
+def budget():
+    return render_template('budget.html')
+
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     # form = MyForm()
@@ -57,29 +90,44 @@ def submit():
     #     print("Boom")
     return render_template('submit.html', form=form)
 
-    # path('month/', views.month, name='month'),
-    # path('month/<slug:date>/', views.month, name='month'),
-    # path('months/', views.months, name='months'),
-    # path('diagnostics/', views.diagnostics, name='diagnostics'),
-    # path('tagfilter/', views.tagfilter, name='tagfilter'),
-    # path('fileimport/', views.fileimport, name='fileimport'),
-    # path('admin/', views.admin, name='admin'),
-    # path('groups/', views.groups, name='groups'),
-    # path('tags/', views.tags, name='tags'),
-    # path('budget/', views.budget, name='budget'),
-    # path('grouptags/', views.grouptags, name='grouptags'),
-    # path('autotags/', views.autotags, name='autotags'),
-    # path('ajax/tags/', views.ajaxtaglist, name='ajaxtaglist'),
-    # path('ajax/tagfilter/<slug:date>/', views.ajaxtagfilter, name='ajaxtagfilter'),
-    # path('ajax/tagfilter/<slug:date>/<tags>/', views.ajaxtagfilter, name='ajaxtagfilter'),
-    # path('ajax/tagtransaction/<int:transaction_id>/<tags>/', views.ajaxtagtransaction, name='ajaxtagtransaction'),
-    # path('ajax/removetag/<int:transaction_id>/<tag>/', views.ajaxremovetag, name='ajaxremovetag'),
+@app.route("/api/tags")
+def api_tags():
+    return {}
+
+@app.route("/api/tagfilter/<date>", defaults={"tags": ""})
+@app.route("/api/tagfilter/<date>/<tags>")
+def api_tagfilter(date, tags):
+    return {}
+
+@app.route("/api/tagfilter/<int:transation_id>/<tags>")
+def api_tagtransaction(transaction_id, tags):
+    return {}
+
+@app.route("/api/tagfilter/<int:transaction_id>/<int:tag>")
+def api_removetag(transaction_id, tag):
+    return {}
+
+@app.route("/api/deletegroup/<int:group_id>")
+def api_deletegroup(group_id):
+    return {}
+
+@app.route("/api/addgroup/<group_name>")
+def api_addgroup(group_id):
+    return {}
+
+@app.route("/api/deletetag/<int:tag_id>")
+def api_deletetag(tag_id):
+    return {}
+
+@app.route("/api/addtag/<tag_name>")
+def api_addtag(tag_name):
+    return {}
+
+@app.route("/api/autotag/<month>")
+def api_autotag(month):
+    return {}
+
     # path('ajax/importfile/<account>/<path:filename>', views.ajaximportfile, name='ajaximportfile'),
-    # path('ajax/deletegroup/<int:group_id>/', views.ajaxdeletegroup, name='ajaxdeletegroup'),
-    # path('ajax/addgroup/<slug:group_name>/', views.ajaxaddgroup, name='ajaxaddgroup'),
-    # path('ajax/deletetag/<int:tag_id>/', views.ajaxdeletetag, name='ajaxdeletetag'),
-    # path('ajax/addtag/<slug:tag_name>/', views.ajaxaddtag, name='ajaxaddtag'),
-    # path('ajax/autotag/<slug:month>/', views.ajaxautotag, name='ajaxautotag'),
 
 #{{ form.csrf_token }}
 #{{ form.name.label }} {{ form.name(size=20) }}
