@@ -1,0 +1,27 @@
+
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - "/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "./database:/var/lib/mysql"
+    user: "1000:1000"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+  finance:
+    image: finance
+    user: "1000:1000"
+    volumes:
+      - "/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "./flaskapp/:/app/flaskapp"
+      - "./src/:/app/src"
+      - "./react/:/app/react"
+    ports:
+      - "5000:5000"

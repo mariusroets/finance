@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_append %}
+<link rel="stylesheet" href="{% static "css/tabulator/tabulator_site.min.css" %}" type="text/css" charset="utf-8">
+{% endblock %}
+{% block js_append %}
+<script src="{% static "js/tabulator/tabulator.min.js" %}" charset="utf-8"></script>
+<script src="{% static "js/moment.min.js" %}" charset="utf-8"></script>
+{% endblock %}
+{% block content %}
+{% include "./monthmenu.html" %}
+<H1>Tag Filter</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+<table>
+    <tr><td>
+        <select name="tag_select" id="tag_select" multiple size="50">
+            {% for r in data %}
+                <option value='{{ r.id }}' title='{{ r.description }}'>{{ r.name }}</option>
+            {% endfor %}
+        </select>
+        <td style="vertical-align: top">
+        <div id='table'></div>
+</table>
+
+<script>
+    //var tabledata = {{ tabledata|safe }};
+    var table = new Tabulator("#table", {
+        height: 400,
+        layout: "fitDataFill",
+        movableColumns: true,
+        columns: [
+            {title: "Id", field: "id"},
+            {title: "Date", field: "date", formatter:'datetime', formatterParams:{outputFormat: 'YYYY-MM-DD'}},
+            {title: "Account", field: "account"},
+            {title: "Description", field: "description"},
+            {title: "Amount", field: "amount", align: 'right', formatter:'money', bottomCalc:'sum', bottomCalcParams: {precision: 2}}
+        ]
+    });
+    //table.setData(tabledata);
+$("#tag_select").change(function() {
+    var tags = [];
+    $("#tag_select option:selected").each(function() {
+        tags.push($(this).text());
+    });
+    var tag_string = '["' + tags.join('","') + '"]';
+    var ajax_url = "/analysis/ajax/tagfilter/";
+    ajax_url += $("#id_month_date").val() + "/";
+    ajax_url += tag_string + "/";
+    $.get(ajax_url, function( data ) {
+        table.setData(data.result);
+    });
+});
+</script>
+
+{% endblock %}
+
+
+

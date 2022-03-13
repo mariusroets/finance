@@ -1,0 +1,9 @@
+form.hidden {
+    display: none;
+}
+#add-name-form {
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    background-color: red;
+}

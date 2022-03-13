@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_append %}
+<link rel="stylesheet" href="{% static "css/tabulator/tabulator_site.min.css" %}" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="{% static "css/addstuff.css" %}" type="text/css">
+{% endblock %}
+{% block js_append %}
+<script src="{% static "js/tabulator/tabulator.min.js" %}" charset="utf-8"></script>
+{% endblock %}
+{% block content %}
+{% include "./adminmenu.html" %}
+<form id='add-name-form'>
+    {{ form }}
+    <button id='add-add-group'>Add</button>
+    <button id='cancel-add-group'>Cancel</button>
+</form>
+
+<H1>Groups</h1>
+<div class='table-controls'>
+    <button id='add-group'>Add Group</button>
+</div>
+<div id='table' style="width: 20%"></div>
+<script>
+    var deleteIcon = function(cell, formatterParams, onRendered) {
+        return "<img src='{% static "icons/cross.png" %}'></img>";
+    };
+    var table = new Tabulator("#table", {
+        height: 600,
+        layout: "fitDataFill",
+        columns: [
+            {title: "Id", field: "id"},
+            {title: "Group Name", field: "name"},
+            {title: "Delete", formatter: deleteIcon, align: 'center', cellClick: function(e, cell) {
+                var ajax_url = "/analysis/ajax/deletegroup/" + cell.getRow().getData().id + "/";
+                $.get(ajax_url, function(data) {
+                    table.setData(data.groups);
+                    console.log(data);
+                });
+            }},
+        ],
+    });
+    var tabledata = {{ groups|safe }};
+    table.setData(tabledata);
+    $("#add-group").click(function() {
+        $("#add-name-form").removeClass('hidden');
+        $("#id_name_field").val("").focus();
+    });
+    $("#add-name-form").addClass('hidden');
+    $("#add-add-group").click(function(e) {
+        e.preventDefault();
+        var ajax_url = "/analysis/ajax/addgroup/" + $("#id_name_field").val() + "/";
+        $.get(ajax_url, function(data) {
+            table.setData(data.groups);
+        });
+        $("#add-name-form").addClass('hidden');
+    });
+    $("#cancel-add-group").click(function(e) {
+        e.preventDefault();
+        $("#add-name-form").addClass('hidden');
+    });
+</script>
+{% endblock %}
+
+
+
+

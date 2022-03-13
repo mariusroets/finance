@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_append %}
+<link rel="stylesheet" href="{% static "css/tabulator/tabulator_site.min.css" %}" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="{% static "css/tagging.css" %}" type="text/css">
+{% endblock %}
+{% block js_append %}
+<script src="{% static "js/tabulator/tabulator.min.js" %}" charset="utf-8"></script>
+<script src="{% static "js/moment.min.js" %}" charset="utf-8"></script>
+{% endblock %}
+{% block content %}
+{% include "./monthmenu.html" %}
+<H1>Available Months</h1>
+
+<table>
+    <tr><th>Month
+    {% for month in data %}
+    <tr><td><a href="/analysis/month/{{ month }}/">{{ month }}</a>
+    {% endfor %}
+</table>
+
+
+{% endblock %}
+

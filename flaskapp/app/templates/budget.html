@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_append %}
+<link rel="stylesheet" href="{% static "css/tabulator/tabulator_site.min.css" %}" type="text/css" charset="utf-8">
+{% endblock %}
+{% block js_append %}
+<script src="{% static "js/tabulator/tabulator.min.js" %}" charset="utf-8"></script>
+<script src="{% static "js/moment.min.js" %}" charset="utf-8"></script>
+{% endblock %}
+{% block content %}
+{% include "./monthmenu.html" %}
+<H1>Budget</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+<table>
+    <tr><th>Income<th><th><th>Expense<th>
+    <tr><th>Salary<td>{{budget.salary|floatformat:2}}<td><th>Home Loan<td>{{budget.homeloan|floatformat:2}}
+    <tr><th>Rent<td>{{budget.rent|floatformat:2}}<td><th>Fixed<td>{{budget.fixed|floatformat:2}}
+    <tr><th><td><td><th>Group<td>{{budget.group|floatformat:2}}
+    <tr><th><td><td><th>Variable<td>{{budget.variable|floatformat:2}}
+    <tr><th><td><td><th>Other<td>{{budget.other|floatformat:2}}
+    <tr><th><td><td><th>Total Monthly<td>{{budget.total_monthly|floatformat:2}}
+    <tr><th>Total<td>{{budget.total_income|floatformat:2}}<td><th>Total<td>{{budget.total_expense|floatformat:2}}
+    <tr><th>Budget Deviation<td colspan=4>{{budget.budget_deviation|floatformat:2}}
+    <tr><th>Actual Deviation<td colspan=4>{{budget.actual_deviation|floatformat:2}}
+</table>
+
+{% endblock %}
+

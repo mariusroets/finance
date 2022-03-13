@@ -1,0 +1,22 @@
+{% load customtags %}
+{% url 'index' as index %}
+{% url 'months' as months %}
+{% url 'month' as month %}
+{% url 'budget' as budget %}
+{% url 'diagnostics' as diagnostics %}
+{% url 'tagfilter' as tagfilter %}
+{% url 'fileimport' as fileimport %}
+{% url 'admin' as admin %}
+<div class='app_tabbar'>
+    <table>
+        <tr>
+            <td class="{% active request index %}"><a  href="{{ index }}">Home</a>
+            <td class="{% active request months %}"><a  href="{{ months }}">Month List</a>
+            <td class="{% active request month %}"><a  href="{{ month }}">Month</a>
+            <td class="{% active request budget %}"><a  href="{{ budget }}">Budget</a>
+            <td class="{% active request diagnostics %}"><a href="{{ diagnostics }}">Diagnostics</a>
+            <td class="{% active request tagfilter %}"><a href="{{ tagfilter }}">Tag Filter</a>
+            <td class="{% active request fileimport %}"><a href="{{ fileimport }}">File Import</a>
+            <td class="{% active request admin %}"><a href="{{ admin }}">Admin</a>
+    </table>
+</div>

@@ -1,0 +1,27 @@
+#remove_tag {
+  position: fixed;
+  left: 45%;
+  top: 45%;
+  background-color: red;
+  z-index: 10;
+  padding: 20px;
+  border: solid black 3px;
+}
+#tag_transaction {
+  position: fixed;
+  left: 30%;
+  top: 45%;
+  background-color: red;
+  z-index: 10;
+  padding: 20px;
+  border: solid black 3px;
+}
+#remove_tag #tags_to_remove{
+  width: 100%;
+}
+#remove_tag.no_display {
+  display: none;
+}
+#tag_transaction.no_display {
+  display: none;
+}

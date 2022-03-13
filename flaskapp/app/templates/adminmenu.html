@@ -1,0 +1,19 @@
+{% load customtags %}
+{% url 'index' as index %}
+{% url 'admin' as admin %}
+{% url 'groups' as groups %}
+{% url 'tags' as tags %}
+{% url 'grouptags' as grouptags %}
+{% url 'autotags' as autotags %}
+<div class='app_tabbar'>
+    <table>
+        <tr>
+            <td class="{% active request index %}"><a  href="{{ index }}">Home</a>
+            <td class="{% active request admin %}"><a  href="{{ admin }}">Admin</a>
+            <td class="{% active request groups %}"><a href="{{ groups }}">Groups</a>
+            <td class="{% active request tags %}"><a href="{{ tags }}">Tags</a>
+            <td class="{% active request grouptags %}"><a href="{{ grouptags }}">Group Tags</a>
+            <td class="{% active request autotags %}"><a href="{{ autotags }}">Auto Tags</a>
+    </table>
+</div>
+

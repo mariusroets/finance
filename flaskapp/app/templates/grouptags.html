@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% include "./adminmenu.html" %}
+<H1>Group Tags</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <table id='dual_table'>
+        <tr><td>
+        <select id="dual_available" size=10 multiple></select>
+        <td><button id="dual_add" type="button">></button><br>
+            <button id="dual_add_all" type="button">>></button><br>
+            <button id="dual_remove" type="button"><</button><br>
+            <button id="dual_remove_all" type="button"><<</button>
+            <td><select id="dual_selected" size=10 multiple></select>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+<style>
+</style>
+<script>
+    var name = '#dual';
+    var table = name + '_table';
+    var avail = name + '_available';
+    var select = name + '_selected';
+    var add = name + '_add';
+    var add_all = name + '_add_all';
+    var remove = name + '_remove';
+    var remove_all = name + '_remove_all';
+    $(avail).css('width','300px');
+    $(select).css('width','300px');
+    $(table + ' button').css('width','50px');
+
+    $.fn.moveSelectedTo = function (selector) {
+        this.find("option:selected").remove().appendTo(selector);
+        $(selector).sortOptionsByText();
+    };
+
+    $.fn.sortOptionsByText = function() {
+        var options = $("#" + this.attr('id') + ' option');
+        options.sort(function(a, b) {
+            if (a.text > b.text) return 1;
+            else if (a.text < b.text) return -1;
+            else return 0;
+        });
+        this.empty().append(options);
+        return options;
+    };
+    $(add).click(function(e) {
+        $(avail).moveSelectedTo(select);
+    });
+    $(remove).click(function(e) {
+        $(select).moveSelectedTo(avail);
+    });
+    $(add_all).click(function(e) {
+        $(avail + ' *').attr('selected','selected');
+        $(avail).moveSelectedTo(select);
+    });
+    $(remove_all).click(function(e) {
+        $(select + ' *').attr('selected','selected');
+        $(select).moveSelectedTo(avail);
+    });
+    $(':submit').click(function(e) {
+        e.preventDefault();
+        $(select+' *').attr('selected','selected');
+        $(avail+' *').attr('selected','selected');
+    });
+    function init_select(a, s) {
+        for (option in a) {
+            $(avail).append($('<option>', a[option]));
+        }
+        for (option in s) {
+            $(select).append($('<option>', s[option]));
+        }
+    }
+    var avail_data = [
+        {value: 1, text: '1'},
+        {value: 2, text: '2'},
+        {value: 3, text: '3'}
+    ];
+    var selected_data = [
+        {value: 4, text: '4'},
+        {value: 5, text: '5'},
+        {value: 6, text: '6'}
+    ];
+    init_select(avail_data, selected_data);
+</script>
+{% endblock %}
+
+

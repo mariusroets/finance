@@ -1,0 +1,16 @@
+div.app_tabbar td {
+    background-color: grey;
+    padding: 5px;
+    border-radius: 15px 15px 0px 0px;
+}
+div.app_tabbar td a {
+    text-decoration: none;
+    color: white
+}
+div.app_tabbar td.app_tabbar_active {
+    background-color: darkgrey;
+}
+div.app_tabbar table {
+    border-collapse: collapse;
+}
+

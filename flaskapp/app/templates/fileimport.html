@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_append %}
+<link rel="stylesheet" href="{% static "css/tabulator/tabulator_site.min.css" %}" type="text/css" charset="utf-8">
+{% endblock %}
+{% block js_append %}
+<script src="{% static "js/tabulator/tabulator.min.js" %}" charset="utf-8"></script>
+<script src="{% static "js/moment.min.js" %}" charset="utf-8"></script>
+{% endblock %}
+{% block content %}
+{% include "./monthmenu.html" %}
+<H1>File Import</h1>
+<form enctype="multipart/form-data" action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+{% if filecontent %}
+<div id='table'></div>
+<script>
+    var tabledata = {{ filecontent|safe }};
+    var table = new Tabulator("#table", {
+        height: 600,
+        layout: "fitDataFill",
+        movableColumns: true,
+        columns: [
+            {title: "Date", field: "Date", formatter:'datetime', formatterParams:{outputFormat: 'YYYY-MM-DD'}},
+            {title: "Description", field: "Description"},
+            {title: "Amount", field: "Amount", align: 'right', formatter:'money', bottomCalc:'sum', bottomCalcParams: {precision: 2}},
+            {title: "Balance", field: "Balance", align: 'right', formatter:'money'}
+        ]
+    });
+    table.setData(tabledata);
+</script>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form2 }}
+    <input type="button" id="id_import_file" value="Import File">
+</form>
+<span id='status_message'><span>
+<script>
+    $("#id_import_file").click(function() {
+        var ajax_url = "/analysis/ajax/importfile/";
+        ajax_url += $("#id_account option:selected").text();
+        ajax_url += "/" + $("#id_filepath").val();
+        $.get(ajax_url, function( data ) {
+            console.log(data);
+            console.log(data['status']);
+            $("#status_message").html("File import into account: "+ data['account'] + "<br>Status: " + data['status']);
+        });
+    });
+</script>
+{% endif %}
+
+
+{% endblock %}
+
