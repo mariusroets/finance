@@ -47,7 +47,7 @@ def month(date):
 def months():
     return render_template('months.html')
 
-@app.routes("/diagnostics/")
+@app.route("/diagnostics/")
 def diagnostics():
     return render_template('diagnostics.html')
 
