@@ -8,7 +8,7 @@ from finance.utils import Base
 import hashlib
 
 #engine = create_engine('sqlite:///data/data.db', echo=True)
-engine = create_engine('sqlite:////data/python/finance/data/data.db')
+engine = create_engine('mysql://finance:finance@192.168.0.105/finance')
 Session = sessionmaker(bind=engine)
 session = Session()
 
