@@ -8,6 +8,12 @@ from .forms import MonthForm
 from db.month import Month
 from db.transaction import TransactionManager
 
+# TODO: index does not link to anything meaningful
+# TODO: month() - The date does not display correctly
+#               - The date box with submit should work. (it works using the URL)
+#               - The tagging box code is not implemented yet. It is currently commented
+#               -    out in month.js because there was some bug
+
 def defaultDate ():
     """Returns the default date for all pages
     """
