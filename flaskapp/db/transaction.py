@@ -3,11 +3,11 @@ import pandas as pd
 from sqlalchemy.orm.exc import NoResultFound
 import datetime as dt
 from .models import *
-from .dbmanager import DBManager
+from .dbmanager import Connection
 from .autotags import AutoTags
 from .tags import Tags
 
-class TransactionManager(DBManager):
+class TransactionManager(Connection):
 
     """Manages everything related to transactions""" 
 

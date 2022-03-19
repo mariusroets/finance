@@ -1,7 +1,7 @@
-from .dbmanager import DBManager
+from .dbmanager import Connection
 from .models import Tag
 
-class Tags(DBManager):
+class Tags(Connection):
     """Manages tags and everything associated with maintaining tags"""
 
     def tag_exists(self, tag_name):
@@ -48,5 +48,3 @@ class Tags(DBManager):
 
         """
         pass
-
-        
