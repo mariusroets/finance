@@ -6,6 +6,7 @@ from flask import render_template
 from app import app
 from .forms import MonthForm
 from db.month import Month
+from db.transaction import TransactionManager
 
 def defaultDate ():
     """Returns the default date for all pages
@@ -42,7 +43,14 @@ def index():
 @app.route("/month/<date>")
 def month(date):
     date = defaultDate() if not date else date
-    return render_template('index.html', date=date)
+    return render_template('month.html', date=date)
+
+
+@app.route("/api/month/<date>")
+def api_month(date):
+    tm = TransactionManager(date)
+    df = tm.transactionsWithTags()
+    return df.to_json(orient='records')
 
 @app.route("/months/")
 def months():
