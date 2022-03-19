@@ -5,6 +5,7 @@ from flask import render_template
 
 from app import app
 from .forms import MonthForm
+from db.month import Month
 
 def defaultDate ():
     """Returns the default date for all pages
@@ -46,6 +47,16 @@ def month(date):
 @app.route("/months/")
 def months():
     return render_template('months.html')
+
+@app.route("/api/months/")
+def api_months():
+    month = Month()
+    
+    return (
+        month.months()
+        .assign(effective_month=lambda x: x.effective_month.astype(str))
+        .to_json(orient='records')
+    )
 
 @app.route("/diagnostics/")
 def diagnostics():

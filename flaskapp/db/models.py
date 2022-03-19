@@ -130,17 +130,6 @@ def createDefaultData():
 ### End of data model
 #############################################
 
-
-
-
-
-class GroupManager(Connection):
-    """Handles all group queries"""
-        
-        
-class AccountManager(Connection):
-    """Handles all account queries"""
-
 if __name__ == "__main__":
     import datetime as dt
     tm = TransactionManager()

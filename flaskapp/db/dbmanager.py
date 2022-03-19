@@ -1,7 +1,12 @@
-from sqlalchemy import inspect
+import json
+import pandas as pd
+from sqlalchemy import inspect, create_engine
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+engine = create_engine('mysql://finance:finance@192.168.0.105/finance')
+Session = sessionmaker(bind=engine)
 
 class DBEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -14,7 +19,7 @@ class DBEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, obj)
 
-class QueryRunner(object):
+class QueryRunner():
     """Runs queries and returns data in various formats"""
 
     def __init__(self):
@@ -81,10 +86,10 @@ class Connection:
             self._session.close()
             self._session = None
 
-    def query_pd(self, query):
+    def query(self, query):
         """Runs a given query and returns a dataframe"""
+        qry = QueryRunner()
         
-        with self:
-            df = pd.read_sql(query.statement, self.session.bind)
+        df = qry.execute(query, returnval='dataframe')
 
         return df
