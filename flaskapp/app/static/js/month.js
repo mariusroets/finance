@@ -28,7 +28,6 @@ $(document).ready(function() {
         },
         rowContext: function(e, row) {
             e.preventDefault();// Prevents the browser context menu from appearing
-            console.log(row.getData().id);
             $("#transaction_id").val(row.getData().id);
             $("#transaction_id_remove_tag").html(row.getData().id);
             $("#tags_to_remove").empty();
@@ -42,9 +41,9 @@ $(document).ready(function() {
             $("#tags_to_remove").change(function() {
                 var tag = $(this).children(":selected").html();
                 var t_id = $("#transaction_id").val();
-                var ajax_url = "/analysis/ajax/removetag/"+t_id+"/"+tag+"/";
+                var api_url = "/api/removetag/"+t_id+"/"+tag;
                 $("#remove_tag").addClass('no_display');
-                $.get(ajax_url, function( data ) {
+                $.get(api_url, function( data ) {
                     if (data['status'] == 'success') {
                         table.updateData([{id: $("#transaction_id").val(), tags: data['tag_string']}]);
                     }
@@ -53,7 +52,6 @@ $(document).ready(function() {
                 });
             });
 
-            console.log(tags);
 
         }
     });
@@ -129,6 +127,5 @@ $(document).ready(function() {
     });
     $.get("/api/month/"+$("#start_date").val(), function(data) {
         table.setData(data);
-        console.log(typeof(data));
     })
 });

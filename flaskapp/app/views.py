@@ -142,9 +142,17 @@ def api_tagtransaction(transaction_id, tags):
     }
     return response 
 
-@app.route("/api/tagfilter/<int:transaction_id>/<int:tag>")
+@app.route("/api/removetag/<int:transaction_id>/<tag>")
 def api_removetag(transaction_id, tag):
-    return {}
+    tm = TransactionManager()
+    tm.removeTag(transaction_id, tag)
+    response = {
+        'status': 'success',
+        'transaction_id': transaction_id,
+        'tag': tag,
+        'tag_string': tm.transactionTags(transaction_id, True)
+    }
+    return response
 
 @app.route("/api/deletegroup/<int:group_id>")
 def api_deletegroup(group_id):
