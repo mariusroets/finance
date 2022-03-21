@@ -4,6 +4,14 @@ from .models import Tag
 class Tags(Connection):
     """Manages tags and everything associated with maintaining tags"""
 
+    def tags(self):
+        """Returns a list of all tags"""
+        return self.query(
+            self.session
+            .query(Tag)
+            .order_by(Tag.name)
+        )
+
     def tag_exists(self, tag_name):
         """Checks whether a tag exists in the database
 
