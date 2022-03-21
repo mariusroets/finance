@@ -4,7 +4,6 @@ from dateutil.relativedelta import relativedelta
 from flask import render_template
 
 from app import app
-from .forms import MonthForm
 from db.month import Month
 from db.tags import Tags
 from db.transaction import TransactionManager
@@ -81,12 +80,6 @@ def api_tags():
 @app.route("/diagnostics/")
 def diagnostics():
     date = defaultDate()
-    if request.method == 'POST':
-        form = MonthForm(request.POST)
-        if form.is_valid():
-            date = form.cleaned_data['month_date']
-    else:
-        form = MonthForm(initial = {'month_date': date})
     tm = TransactionManager(date)
     context = {
         'expenseincometransfer': tm.expenseIncomeTagged(),
