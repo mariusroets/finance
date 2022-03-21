@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 engine = create_engine('mysql://finance:finance@192.168.0.105/finance')
 Session = sessionmaker(bind=engine)
+session = Session()
 
 class DBEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -64,27 +65,14 @@ class QueryRunner():
 class Connection:
     """Handles a set of database changes for a specific entity"""
 
-    def __init__(self, session=None):
+    def __init__(self):
         """Constructor """
-        self._session = None
-        if session:
-            self._session = session
-        else:
-            self._session = Session()
-
-    def __del__(self):
-        self.close()
+        self._session = session
 
     @property
     def session(self):
         """The database session used"""
         return self._session
-
-    def close(self):
-        """Close the session"""
-        if self._session:
-            self._session.close()
-            self._session = None
 
     def query(self, query):
         """Runs a given query and returns a dataframe"""
