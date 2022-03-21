@@ -6,6 +6,7 @@ from flask import render_template
 from app import app
 from .forms import MonthForm
 from db.month import Month
+from db.tags import Tags
 from db.transaction import TransactionManager
 
 # TODO: index does not link to anything meaningful
@@ -71,6 +72,14 @@ def api_months():
         .to_json(orient='records')
     )
 
+@app.route("/api/tags/")
+def api_tags():
+    return (
+        Tags()
+        .tags()
+        .to_json(orient='records')
+    )
+
 @app.route("/diagnostics/")
 def diagnostics():
     return render_template('diagnostics.html')
@@ -114,18 +123,24 @@ def submit():
     #     print("Boom")
     return render_template('submit.html', form=form)
 
-@app.route("/api/tags")
-def api_tags():
-    return {}
-
 @app.route("/api/tagfilter/<date>", defaults={"tags": ""})
 @app.route("/api/tagfilter/<date>/<tags>")
 def api_tagfilter(date, tags):
     return {}
 
-@app.route("/api/tagfilter/<int:transation_id>/<tags>")
+@app.route("/api/tagtransaction/<int:transaction_id>/<tags>")
 def api_tagtransaction(transaction_id, tags):
-    return {}
+    t = tags.split(",")
+    t = [x.strip() for x in t if x]
+    tm = TransactionManager()
+    tm.tagTransaction([transaction_id], t)
+    response = {
+        'status': 'success',
+        'transaction_id': transaction_id,
+        'tags': t,
+        'tag_string': ",".join(t)
+    }
+    return response 
 
 @app.route("/api/tagfilter/<int:transaction_id>/<int:tag>")
 def api_removetag(transaction_id, tag):

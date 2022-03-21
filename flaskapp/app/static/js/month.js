@@ -57,68 +57,68 @@ $(document).ready(function() {
 
         }
     });
-    //$( function() {
-    //    var tags = {{ tags|safe }};
-    //    var availableTags = tags.map(function(v) { return v.name; });
-    //    function split( val ) {
-    //        return val.split( /,\s*/ );
-    //    }
-    //    function extractLast( term ) {
-    //        return split( term ).pop();
-    //    }
+    $.get('/api/tags/', function(tags) {
+        tags = JSON.parse(tags);
+        var availableTags = tags.map(function(v) { return v.name; });
+        function split( val ) {
+            return val.split( /,\s*/ );
+        }
+        function extractLast( term ) {
+            return split( term ).pop();
+        }
 
-    //    $( "#tags" )
-    //    // don't navigate away from the field on tab when selecting an item
-    //        .on( "keydown", function( event ) {
-    //            if ( event.keyCode === $.ui.keyCode.TAB &&
-    //                $( this ).autocomplete( "instance" ).menu.active ) {
-    //                event.preventDefault();
-    //            }
-    //        })
-    //        .autocomplete({
-    //            minLength: 0,
-    //            source: function( request, response ) {
-    //                // delegate back to autocomplete, but extract the last term
-    //                response( $.ui.autocomplete.filter(
-    //                    availableTags, extractLast( request.term ) ) );
-    //            },
-    //            focus: function() {
-    //                // prevent value inserted on focus
-    //                return false;
-    //            },
-    //            select: function( event, ui ) {
-    //                var terms = split( this.value );
-    //                // remove the current input
-    //                terms.pop();
-    //                // add the selected item
-    //                terms.push( ui.item.value );
-    //                // add placeholder to get the comma-and-space at the end
-    //                terms.push( "" );
-    //                this.value = terms.join( "," );
-    //                return false;
-    //            }
-    //        });
-    //    $("#btn_tag_transaction").click(function() {
-    //        var ajax_url = "/analysis/ajax/tagtransaction/";
-    //        ajax_url += $("#transaction_id").val() + "/";
-    //        ajax_url += $("#tags").val() + "/";
-    //        $.get(ajax_url, function( data ) {
-    //            $("#tags").val('');
-    //            if (data['status'] == 'success') {
-    //                table.updateData([{id: $("#transaction_id").val(), tags: data['tag_string']}]);
-    //            }
-    //            $("#tag_transaction").addClass('no_display');
-    //            //$("#status_message").html("File import into account: "+ data['account'] + "<br>Status: " + data['status']);
-    //        });
-    //    });
-    //    $("#btn_cancel_tag").click(function() {
-    //        $("#tag_transaction").addClass('no_display');
-    //    });
-    //    $("#btn_cancel_remove").click(function() {
-    //        $("#remove_tag").addClass('no_display');
-    //    });
+        $( "#tags" )
+        // don't navigate away from the field on tab when selecting an item
+            .on( "keydown", function( event ) {
+                if ( event.keyCode === $.ui.keyCode.TAB &&
+                    $( this ).autocomplete( "instance" ).menu.active ) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    response( $.ui.autocomplete.filter(
+                        availableTags, extractLast( request.term ) ) );
+                },
+                focus: function() {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var terms = split( this.value );
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push( ui.item.value );
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push( "" );
+                    this.value = terms.join( "," );
+                    return false;
+                }
+            });
+        $("#btn_tag_transaction").click(function() {
+            var api_url = "/api/tagtransaction/";
+            api_url += $("#transaction_id").val() + "/";
+            api_url += $("#tags").val();
+            $.get(api_url, function( data ) {
+                $("#tags").val('');
+                if (data['status'] == 'success') {
+                    table.updateData([{id: $("#transaction_id").val(), tags: data['tag_string']}]);
+                }
+                $("#tag_transaction").addClass('no_display');
+                //$("#status_message").html("File import into account: "+ data['account'] + "<br>Status: " + data['status']);
+            });
+        });
+        $("#btn_cancel_tag").click(function() {
+            $("#tag_transaction").addClass('no_display');
+        });
+        $("#btn_cancel_remove").click(function() {
+            $("#remove_tag").addClass('no_display');
+        });
 
-    //} );
+    } );
 
     $("#autotag_button").click(function() {
         var ajax_url = "/analysis/ajax/autotag/";
@@ -129,5 +129,6 @@ $(document).ready(function() {
     });
     $.get("/api/month/"+$("#start_date").val(), function(data) {
         table.setData(data);
+        console.log(typeof(data));
     })
 });
