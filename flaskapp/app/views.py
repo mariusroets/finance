@@ -9,8 +9,7 @@ from db.month import Month
 from db.transaction import TransactionManager
 
 # TODO: index does not link to anything meaningful
-# TODO: month() - The date does not display correctly
-#               - The date box with submit should work. (it works using the URL)
+# TODO: month() - The date box with submit should work. (it works using the URL)
 #               - The tagging box code is not implemented yet. It is currently commented
 #               -    out in month.js because there was some bug
 
@@ -56,7 +55,7 @@ def month(date):
 def api_month(date):
     tm = TransactionManager(date)
     df = tm.transactionsWithTags()
-    return df.to_json(orient='records')
+    return df.to_json(orient='records', date_format='iso')
 
 @app.route("/months/")
 def months():
