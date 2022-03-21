@@ -11,8 +11,6 @@ from db.transaction import TransactionManager
 
 # TODO: index does not link to anything meaningful
 # TODO: month() - The date box with submit should work. (it works using the URL)
-#               - The tagging box code is not implemented yet. It is currently commented
-#               -    out in month.js because there was some bug
 
 def defaultDate ():
     """Returns the default date for all pages
@@ -82,7 +80,37 @@ def api_tags():
 
 @app.route("/diagnostics/")
 def diagnostics():
+    date = defaultDate()
+    if request.method == 'POST':
+        form = MonthForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['month_date']
+    else:
+        form = MonthForm(initial = {'month_date': date})
+    tm = TransactionManager(date)
+    context = {
+        'expenseincometransfer': tm.expenseIncomeTagged(),
+        'transferbalance': tm.transferBalanceReport(),
+        'untagged': len(tm.untagged()),
+        'form': form
+    }
     return render_template('diagnostics.html')
+
+@app.route("/api/diagnostics/<month>")
+def api_diagnostics(month):
+    tm = TransactionManager(month)
+    eit = tm.expenseIncomeTagged()
+    tbr = tm.transferBalanceReport()
+    unt = tm.untagged()
+    context = {
+        'all_eit_tagged': eit[0],
+        'expenseincometransfer': eit[1].to_json(orient='records'),
+        'transferbalance': tbr[0],
+        'transfers': tbr[1].to_json(orient='records'),
+        'untagged_count': len(unt),
+        'untagged': unt.to_json(orient='records'),
+    }
+    return context
 
 @app.route("/fileimport/")
 def fileimport():
